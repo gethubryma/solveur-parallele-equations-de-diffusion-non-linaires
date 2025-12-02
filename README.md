@@ -18,13 +18,8 @@ Le modèle correspond à une équation de diffusion non linéaire 1D sur le doma
 La forme évolutive (schémas explicite / implicite) est de type :
 
 $$
-\frac{\partial u}{\partial t}
-= \frac{\partial}{\partial x}\left( \kappa(u),\frac{\partial u}{\partial x} \right)
-
-* \sigma \left(u^4 - 1\right)
-
-- Q(x),
-  $$
+\frac{\partial u}{\partial t} = \frac{\partial}{\partial x}\left( \kappa(u),\frac{\partial u}{\partial x} \right) -\sigma \left(u^4 - 1\right) + Q(x),
+$$
 
 avec :
 
