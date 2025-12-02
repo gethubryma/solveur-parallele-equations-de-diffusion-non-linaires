@@ -13,7 +13,7 @@ Le code est écrit en **C++11**, utilise **MPI** et la bibliothèque **HYPRE** p
 
 ## 1. Modèle mathématique
 
-Le modèle correspond à une équation de diffusion non linéaire 1D sur le domaine ( x \in [0, 1] ), avec conduction, rayonnement et source localisée.
+Le modèle correspond à une équation de diffusion non linéaire 1D sur le domaine $x \in [0, 1]$, avec conduction, rayonnement et source localisée.
 
 La forme évolutive (schémas explicite / implicite) est de type :
 
@@ -24,15 +24,15 @@ $$
 * \sigma \left(u^4 - 1\right)
 
 - Q(x),
-$$
+  $$
 
 avec :
 
-* $( u = u(x,t) )$ : température (ou variable scalaire diffusante),
-* $( \kappa(u) = k_0,u^q )$ : conductivité non linéaire,
-* $( \sigma > 0 )$ : coefficient de rayonnement,
-* $( Q(x) )$ : terme source volumique, ici localisé près de $( x = 0 )$,
-* $( k_0 > 0 ), ( q > 0 )$ : paramètres de non-linéarité.
+* $u = u(x,t)$ : température (ou variable scalaire diffusante),
+* $\kappa(u) = k_0 u^q$ : conductivité non linéaire,
+* $\sigma > 0$ : coefficient de rayonnement,
+* $Q(x)$ : terme source volumique, ici localisé près de $x = 0$,
+* $k_0 > 0$, $q > 0$ : paramètres de non-linéarité.
 
 Dans le code, la source est définie par :
 
@@ -48,9 +48,9 @@ $$
 
 Les conditions aux limites implémentées sont :
 
-* À gauche ( x = 0 ) : condition de type Neumann , approx. par une réflexion du point intérieur
-  $( u_{-1} \approx u_0 )$ (symétrie → dérivée première nulle).
-* À droite $( x = 1 )$ : condition de Dirichlet
+* À gauche $x = 0$ : condition de type Neumann, approx. par une réflexion du point intérieur
+  $u_{-1} \approx u_0$ (symétrie → dérivée première nulle).
+* À droite $x = 1$ : condition de Dirichlet
   $$
   u(1,t) = 1.
   $$
@@ -77,9 +77,9 @@ sous les mêmes conditions aux limites. Le résidu non linéaire et le Jacobien 
 
 ### 2.1. Maillage spatial
 
-Le domaine $([0,1])$ est discrétisé de manière uniforme avec ( N ) sous-intervalles :
+Le domaine $[0,1]$ est discrétisé de manière uniforme avec $N$ sous-intervalles :
 
-* Nombre de points : ( N + 1 )
+* Nombre de points : $N + 1$
 * Pas d’espace :
   $$
   \Delta x = \frac{1}{N}.
@@ -89,7 +89,7 @@ Dans le code :
 
 ```cpp
 int N = 50;
-$ double dx = 1.0 / N $;
+double dx = 1.0 / N;
 ```
 
 ### 2.2. Schéma explicite en temps
@@ -103,13 +103,13 @@ void explicitStep(std::vector<double>& u, double dt, double dx,
 
 Principe général :
 
-* Avancement temporel avec ( u^{n+1} = u^n + \Delta t,F(u^n) ),
+* Avancement temporel avec $u^{n+1} = u^n + \Delta t,F(u^n)$,
 * Calcul de la conduction via un flux diffusif avec conductivité moyenne aux interfaces,
-* Calcul du terme de rayonnement ( \sigma (u^4 - 1) ),
-* Ajout de la source ( Q(x) ),
+* Calcul du terme de rayonnement $\sigma (u^4 - 1)$,
+* Ajout de la source $Q(x)$,
 * Application des conditions aux limites (Neumann à gauche, Dirichlet à droite).
 
-Le pas de temps ( \Delta t ) est choisi à partir d’un critère de stabilité de type CFL :
+Le pas de temps $\Delta t$ est choisi à partir d’un critère de stabilité de type CFL :
 
 ```cpp
 double gamma = 0.1;
@@ -118,7 +118,7 @@ double dt = gamma * 2.0 / (4.0 * sigma * std::pow(2.0, 3)
 int nsteps = 1000;
 ```
 
-Le code évolue la solution initiale (ici ( u(x,0) = 1 )) pendant `nsteps` itérations.
+Le code évolue la solution initiale (ici $u(x,0) = 1$) pendant `nsteps` itérations.
 
 ### 2.3. Schéma implicite linéarisé
 
@@ -131,9 +131,9 @@ void implicitStep(std::vector<double>& u, double dt, double dx,
 
 Idée :
 
-* On part d’un schéma implicite ( u^{n+1} = u^n + \Delta t,F(u^{n+1}) ),
+* On part d’un schéma implicite $u^{n+1} = u^n + \Delta t,F(u^{n+1})$,
 * La non-linéarité est linéarisée autour de l’itéré courant,
-* On obtient à chaque pas un système linéaire tridiagonal en ( u^{n+1} ),
+* On obtient à chaque pas un système linéaire tridiagonal en $u^{n+1}$,
 * Ce système est résolu par l’algorithme de Thomas (`solveTridiag`).
 
 Fonction interne :
@@ -159,7 +159,7 @@ int newtonSolve(std::vector<double>& u,
 
 Étapes principales par itération :
 
-1. Calcul du résidu non linéaire ( F(u) ) :
+1. Calcul du résidu non linéaire $F(u)$ :
 
    ```cpp
    std::vector<double> computeResidualNewton(const std::vector<double>& u,
@@ -167,7 +167,7 @@ int newtonSolve(std::vector<double>& u,
                                              double k0, double q, double beta);
    ```
 
-2. Construction du Jacobien tridiagonal ( J(u) ) :
+2. Construction du Jacobien tridiagonal $J(u)$ :
 
    ```cpp
    void computeJacobianNewton(const std::vector<double>& u,
@@ -178,11 +178,11 @@ int newtonSolve(std::vector<double>& u,
                               std::vector<double>& lower);
    ```
 
-3. Résolution du système linéaire ( J(u),\delta u = -F(u) ) par `solveTridiag`.
+3. Résolution du système linéaire $J(u),\delta u = -F(u)$ par `solveTridiag`.
 
-4. Mise à jour : $( u \leftarrow u + \delta u )$.
+4. Mise à jour : $u \leftarrow u + \delta u$.
 
-Critère d’arrêt : norme $( |\delta u|_\infty < \text{tol} )$.
+Critère d’arrêt : norme $|\delta u|_\infty < \text{tol}$.
 
 ---
 
@@ -199,11 +199,11 @@ int newtonSolveHypre(std::vector<double>& u,
 
 Principales étapes :
 
-1. Construction du résidu $( F(u) )$ et des diagonales du Jacobien (comme dans la version séquentielle).
+1. Construction du résidu $F(u)$ et des diagonales du Jacobien (comme dans la version séquentielle).
 
 2. Assemblage de la matrice tridiagonale dans un objet `HYPRE_IJMatrix`.
 
-3. Assemblage du vecteur second membre `b_` (valeurs de $(-F(u))$).
+3. Assemblage du vecteur second membre `b_` (valeurs de $-F(u)$).
 
 4. Création d’un vecteur solution `x_` initialisé à zéro.
 
@@ -223,7 +223,7 @@ Principales étapes :
    HYPRE_BoomerAMGSolve(solver, parcsr_A, par_b, par_x);
    ```
 
-6. Récupération de la correction `delta` et mise à jour de la solution ( u ).
+6. Récupération de la correction `delta` et mise à jour de la solution $u$.
 
 Cette approche permet de traiter des tailles de problèmes beaucoup plus grandes en s’appuyant sur un solveur multigrille robuste, potentiellement en parallèle via MPI.
 
@@ -293,7 +293,7 @@ int newtonSolveHypre(std::vector<double>& u,
 
 Implémentation de l’ensemble des méthodes numériques :
 
-* `computeKappa` : calcul de $( \kappa(u) = k_0,u^q )$,
+* `computeKappa` : calcul de $\kappa(u) = k_0 u^q$,
 * `explicitStep` : schéma explicite,
 * `implicitStep` + `solveTridiag` : schéma implicite linéarisé et solveur tridiagonal,
 * `computeResidualNewton`, `computeJacobianNewton` : résidu et Jacobien pour Newton,
@@ -385,7 +385,7 @@ Le programme affiche :
 Newton converge en XX itérations, ||delta||inf=...
 ```
 
-Les appels à `printSolution` sont commentés dans `main.cc`. Pour visualiser le profil final ( u(x) ) d’une méthode, il suffit de décommenter :
+Les appels à `printSolution` sont commentés dans `main.cc`. Pour visualiser le profil final $u(x)$ d’une méthode, il suffit de décommenter :
 
 ```cpp
 // printSolution(u_explicit, dx);
@@ -459,5 +459,3 @@ Ce projet fournit un cadre complet pour :
 * Expérimenter différents schémas temporels (explicite / implicite) pour une équation de diffusion non linéaire avec rayonnement,
 * Étudier la convergence vers l’état stationnaire via une méthode de Newton,
 * Comparer une résolution séquentielle tridiagonale et une résolution via un solveur multigrille parallèle (HYPRE).
-
-
