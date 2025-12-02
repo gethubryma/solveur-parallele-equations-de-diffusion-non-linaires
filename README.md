@@ -35,7 +35,6 @@ $$
 Q(x) =
 \begin{cases}
 \beta, & x \le 0.2,\
-
 0, & x > 0.2.
 \end{cases}
 $$
@@ -46,10 +45,7 @@ Les conditions aux limites implémentées sont :
 
 * À gauche $x = 0$ : condition de type Neumann, approx. par une réflexion du point intérieur
   $u_{-1} \approx u_0$ (symétrie → dérivée première nulle).
-* À droite $x = 1$ : condition de Dirichlet
-  $
-  u(1,t) = 1.
-  $
+* À droite $x = 1$ : condition de Dirichlet u(1,t) = 1.
 
 ### 1.2. Problème stationnaire
 
