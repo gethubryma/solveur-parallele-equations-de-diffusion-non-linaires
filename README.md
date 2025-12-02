@@ -51,12 +51,7 @@ Les conditions aux limites implémentées sont :
 
 La méthode de Newton cherche à résoudre le problème stationnaire associé :
 
-$$
-
-* \frac{\mathrm{d}}{\mathrm{d}x}\left( \kappa(u),\frac{\mathrm{d}u}{\mathrm{d}x} \right)
-
-+ \sigma \left(u^4 - 1\right) - Q(x)= 0,
-  $$
+$$\frac{\mathrm{d}}{\mathrm{d}x}\left( \kappa(u),\frac{\mathrm{d}u}{\mathrm{d}x} \right) + \sigma \left(u^4 - 1\right) - Q(x)= 0 $$
 
 sous les mêmes conditions aux limites. Le résidu non linéaire et le Jacobien tridiagonal correspondant sont construits dans `methodes.cc`.
 
@@ -70,9 +65,7 @@ Le domaine $[0,1]$ est discrétisé de manière uniforme avec $N$ sous-intervall
 
 * Nombre de points : $N + 1$
 * Pas d’espace :
-  $$
-  \Delta x = \frac{1}{N}.
-  $$
+  $\Delta x = \frac{1}{N}$
 
 Dans le code :
 
