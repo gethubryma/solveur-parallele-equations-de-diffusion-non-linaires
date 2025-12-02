@@ -35,6 +35,7 @@ $$
 Q(x) =
 \begin{cases}
 \beta, & x \le 0.2,\
+
 0, & x > 0.2.
 \end{cases}
 $$
@@ -46,9 +47,9 @@ Les conditions aux limites implémentées sont :
 * À gauche $x = 0$ : condition de type Neumann, approx. par une réflexion du point intérieur
   $u_{-1} \approx u_0$ (symétrie → dérivée première nulle).
 * À droite $x = 1$ : condition de Dirichlet
-  $$
+  $
   u(1,t) = 1.
-  $$
+  $
 
 ### 1.2. Problème stationnaire
 
@@ -58,10 +59,7 @@ $$
 
 * \frac{\mathrm{d}}{\mathrm{d}x}\left( \kappa(u),\frac{\mathrm{d}u}{\mathrm{d}x} \right)
 
-- \sigma \left(u^4 - 1\right)
-
-* Q(x)
-  = 0,
++ \sigma \left(u^4 - 1\right) - Q(x)= 0,
   $$
 
 sous les mêmes conditions aux limites. Le résidu non linéaire et le Jacobien tridiagonal correspondant sont construits dans `methodes.cc`.
